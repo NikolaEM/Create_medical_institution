@@ -15,10 +15,12 @@ class Doctor extends Person {
     }
 
     scheduleAnAppointment(examination) {
-       
+
+       if(this == examination.patient.doctor){
         console.log(`An appointment was made. Examination type is ${examination.type} for patient ${examination.patient.name} ${examination.patient.surName} with doctor ${this.surName}`)
-       
     }
+}
+    
 }
 
 class Patient extends Person {
@@ -41,11 +43,13 @@ class Examination {
         if (this.constructor == Examination) {
             throw new Error("Abstract classes can't be instantiated.");
           }
-        
+        if(!type == SugarLevelReview || !type == BloodPresureExamination || !type == CholesterolScreening){
+        }
         this.date = date;
         this.time = time;
         this.patient = patient;
         this.type = type;
+        
     }
 
     doExamination(){
@@ -56,8 +60,8 @@ class Examination {
 class SugarLevelReview extends Examination {
     value = ''
     timeOfLastMeal = ''
-    constructor(date, time, patient) {
-        super(date, time, patient, 'sugar level');
+    constructor(date, time, patient, type) {
+        super(date, time, patient, type);
     }
 
     doExamination() {
@@ -74,8 +78,8 @@ class BloodPresureExamination extends Examination {
   bottomValue = ''
   pulse = ''
 
-    constructor(date, time, patient) {
-        super(date, time, patient, 'blood presure');
+    constructor(date, time, patient, type) {
+        super(date, time, patient, type);
     }
 
     doExamination() {
@@ -112,12 +116,15 @@ class CholesterolScreening extends Examination
 
 
 let docMilan = new Doctor('Milan', 'Milanovic', 'cardiologist');
+let docZoran = new Doctor('Zoran', 'Zoranovic', 'cardiologist')
 let pacDragan = new Patient('Dragan', 'Jovanovic', '023342323', '0005677');
  pacDragan.chooseDoctor(docMilan);
-let examination1 = new SugarLevelReview('12-12-2017', '08:00', pacDragan);
+let examination1 = new SugarLevelReview('12-12-2017', '08:00', pacDragan, 'sugar level');
  docMilan.scheduleAnAppointment(examination1);
-let examination2 = new BloodPresureExamination('12-12-2017', '08:15',pacDragan);
+let examination2 = new BloodPresureExamination('12-12-2017', '08:15',pacDragan, 'blood presure');
  docMilan.scheduleAnAppointment(examination2);
+ let examination3 = new BloodPresureExamination('12-12-2017', '08:15',pacDragan, 'blood presure');
 
  examination1.doExamination();
  examination2.doExamination();
+ console.log('nevazeci pregled',examination3.doExamination());
