@@ -1,124 +1,123 @@
- class Osoba {
-    public $ime;
-    public $prezime;
+ class Person {
 
-    public function __construct(string $ime, string $prezime) {
-        $this->ime = $ime;
-        $this->prezime = $prezime;
+    constructor(name, surName) {
+        this.name = name;
+        this.surName = surName;
     }
 }
 
-class Doktor extends Osoba {
-    public $specijalnost;
+class Doctor extends Person {
+    
 
-    public function __construct(string $ime, string $prezime, string $specijalnost) {
-        parent::__construct($ime, $prezime);
-        $this->specijalnost = $specijalnost;
+    constructor(name, surName, specialty) {
+        super(name, surName);
+        this.specialty = specialty
     }
 
-    public function zakaziPregled(Pregled $pregled) {
-        echo "Zakazan je pregled $pregled->tip za pacijenta {$pregled->pacijent->ime} {$pregled->pacijent->prezime} kod doktora $this->prezime <br />";
-    }
-}
-
-class Pacijent extends Osoba {
-    public $jmbg;
-    public $brojKartona;
-    public $doktor;
-
-    public function __construct(string $ime, string $prezime, string $jmbg, string $brojKartona) {
-        parent::__construct($ime, $prezime);
-        $this->jmbg = $jmbg;
-        $this->brojKartona = $brojKartona;
-    }
-
-    public function izaberiLekara(Doktor $docMilan) {
-        $this->doktor = $docMilan;
+    scheduleAnAppointment(examination) {
+       
+        console.log(`An appointment was made. Examination type is ${examination.type} for patient ${examination.patient.name} ${examination.patient.surName} with doctor ${this.surName}`)
+       
     }
 }
 
-abstract class Pregled {
-    public $datum;
-    public $vreme;
-    public $pacijent;
-    public $tip;
-
-    public function __construct(string $datum, string $vreme, Pacijent $pacijent, string $tip) {
-        $this->datum = $datum;
-        $this->vreme = $vreme;
-        $this->pacijent = $pacijent;
-        $this->tip = $tip;
+class Patient extends Person {
+    
+    constructor(name, surName, jmbg, medicalRecordNumber) {
+        super(name, surName)
+        this.jmbg = jmbg;
+        this.medicalRecordNumber = medicalRecordNumber;
     }
 
-    abstract public function obaviPregled();
-}
-
-class PregledNivoSecera extends Pregled {
-
-    public $vrednost;
-    public $vremePoslednjegObroka;
-
-    public function __construct(string $datum, string $vreme, Pacijent $pacijent) {
-        parent::__construct($datum, $vreme, $pacijent, 'nivo secera');
-    }
-
-    public function obaviPregled() {
-        echo "Obavi pregled za pacijenta {$this->pacijent->ime} {$this->pacijent->prezime} <br />";
-        $this->vrednost = 40;
-        $this->vremePoslednjegObroka = '08:56';
-
-        echo "Rezultati preglda: vrednost $this->vrednost, vreme poslednjeg obroka $this->vremePoslednjegObroka <br />";
+    chooseDoctor(doctor) {
+        this.doctor = doctor;
     }
 }
 
-class PregledKrvniPritisak extends Pregled {
-    public $gornjaVrednost;
-    public $donjaVrednost;
-    public $puls;
+class Examination {
+  
 
-    public function __construct(string $datum, string $vreme, Pacijent $pacijent) {
-        parent::__construct($datum, $vreme, $pacijent, 'krvi pritisak');
+    constructor(date, time, patient, type) {
+        if (this.constructor == Examination) {
+            throw new Error("Abstract classes can't be instantiated.");
+          }
+        
+        this.date = date;
+        this.time = time;
+        this.patient = patient;
+        this.type = type;
     }
 
-    public function obaviPregled() {
-        echo "Obavi pregled za pacijenta {$this->pacijent->ime} {$this->pacijent->prezime} <br />";
-        $this->gornjaVrednost = 120;
-        $this->donjaVrednost = 80;
-        $this->puls = 60;
-        echo "Rezultati pregleda: pritisak je {$this->gornjaVrednost}/{$this->donjaVrednost}, puls je $this->puls <br />";
+    doExamination(){
+        throw new Error(" Added abstract Method has no implementation");
+    };
+}
+
+class SugarLevelReview extends Examination {
+    value = ''
+    timeOfLastMeal = ''
+    constructor(date, time, patient) {
+        super(date, time, patient, 'sugar level');
+    }
+
+    doExamination() {
+        console.log( `Do examination for patient ${this.patient.name} ${this.patient.surName} `)
+        this.value = 40;
+        this.timeOfLastMeal = '08:56';
+
+        console.log(`Review results: value ${this.value}, time of the last meal ${this.timeOfLastMeal} `)
+    }
+}
+
+class BloodPresureExamination extends Examination {
+  upperValue = ''
+  bottomValue = ''
+  pulse = ''
+
+    constructor(date, time, patient) {
+        super(date, time, patient, 'krvi pritisak');
+    }
+
+    doExamination() {
+        console.log('Blood presure for patient', this.patient)
+        console.log(`Do examination for patient ${this.patient.name} ${this.patient.surName} `)
+        this.upperValue = 120;
+        this.bottomValue = 80;
+        this.puls = 60;
+        console.log( `Review results: Blood presure is ${this.upperValue}/${this.bottomValue}, pulse is ${this.pulse} `)
 
     }
 }
 
-class PregledHolesterol extends Pregled
+class CholesterolScreening extends Examination
 {
-   public $vrednost;
-   public $vremePoslednjegObroka;
+   value = ''
+   timeOfLastMeal = ' '
 
-   public function __construct(string $datum, string $vreme, Pacijent $pacijent)
+   constructor(date, time, patient)
    {
-       parent::__construct($datum, $vreme, $pacijent, 'nivo holesterola');
+       super(date, time, patient, 'cholesterol level');
    }
 
-   public function obaviPregled()
+  doExamination()
    {
-       echo "Obavi pregled holesterola za pacijenta {$this->pacijent->ime} {$this->pacijent->prezime} <br/>";
+       console.log(`Do examination of cholesterol for patient ${this.patient.name} ${this.patient.surName} `)
 
-       $this->vrednost = 40;
-       $this->vremePoslednjegObroka = '08:56';
+       this.value = 40;
+       this.timeOfLastMeal = '08:56';
 
-       echo "Rezultati pregleda: vrednost $this->vrednost, vreme poslednjeg obroka $this->vremePoslednjegObroka <br/>";
+       console.log(`Review results: value ${this.value}, time of the last meal ${this.timeOfLastMeal} `)
    }
 }
 
-$docMilan = new Doktor('Milan', 'Milanovic', 'kardiolog');
-$pacDragan = new Pacijent('Dragan', 'Jovanovic', '023342323', '0005677');
-$pacDragan->izaberiLekara($docMilan);
 
-$pregled1 = new PregledNivoSecera('12-12-2017', '08:00', $pacDragan);
-$docMilan->zakaziPregled($pregled1);
-$pregled2 = new PregledKrvniPritisak('12-12-2017', '08:15', $pacDragan);
-$docMilan->zakaziPregled($pregled2);
+let docMilan = new Doctor('Milan', 'Milanovic', 'cardiologist');
+let pacDragan = new Patient('Dragan', 'Jovanovic', '023342323', '0005677');
+ pacDragan.chooseDoctor(docMilan);
+let examination1 = new SugarLevelReview('12-12-2017', '08:00', pacDragan);
+ docMilan.scheduleAnAppointment(examination1);
+let examination2 = new BloodPresureExamination('12-12-2017', '08:15',pacDragan);
+ docMilan.scheduleAnAppointment(examination2);
 
-$pregled1->obaviPregled();
-$pregled2->obaviPregled();
+ examination1.doExamination();
+ examination2.doExamination();
