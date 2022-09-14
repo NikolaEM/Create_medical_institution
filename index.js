@@ -75,7 +75,7 @@ class BloodPresureExamination extends Examination {
   pulse = ''
 
     constructor(date, time, patient) {
-        super(date, time, patient, 'krvi pritisak');
+        super(date, time, patient, 'blood presure');
     }
 
     doExamination() {
