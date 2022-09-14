@@ -83,7 +83,7 @@ class BloodPresureExamination extends Examination {
         console.log(`Do examination for patient ${this.patient.name} ${this.patient.surName} `)
         this.upperValue = 120;
         this.bottomValue = 80;
-        this.puls = 60;
+        this.pulse = 60;
         console.log( `Review results: Blood presure is ${this.upperValue}/${this.bottomValue}, pulse is ${this.pulse} `)
 
     }
